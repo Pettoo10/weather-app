@@ -71,7 +71,7 @@ Retrieves historical weather data for the specified location.
 ]
 ```
 
-### 2. Get Historical Weather Forecast
+### 3. Generate Weather Article
 
 **Endpoint:**
 
@@ -127,10 +127,11 @@ The API may return the following error responses:
 }
 ```
 
-- **Transaction failed**: The transaction failed due to some reason.
+- **Translation failed**: The translation failed due to some reason.
 ```json
 {
-    "transaction failed": "Unable to translate text" 
+    "error": "Language not supported",
+    "original_text": text,
 }
 ```
 Return original text if translation fails

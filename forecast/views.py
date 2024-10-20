@@ -194,6 +194,6 @@ def translate_text(text, target_language):
         translation = GoogleTranslator(source='auto', target=target_language).translate(text)
         return translation
     except Exception as e:
-        # Print error message if translation fails
         print(f"Translation failed: {e}")
-        return text  # Return original text if translation fails
+        return {"error": "Language not supported",
+                "original_text": text} # Return original text if translation fails
