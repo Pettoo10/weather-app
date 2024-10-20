@@ -79,10 +79,10 @@ jobs:
 
     - name: Wait for the application to be available
       run: |
-        sleep 10
+        sleep 15
 
     - name: Run tests
       env:
         BASE_URL: http://localhost:8000/api
       run: |
-        docker exec weather-app python manage.py test forecast.tests
+        docker exec weather-app python3 manage.py test forecast.tests
