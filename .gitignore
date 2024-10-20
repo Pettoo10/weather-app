@@ -1,0 +1,13 @@
+# Python
+*.pyc
+__pycache__/
+
+# Environmentálne súbory
+.env
+
+# Django
+/static/
+/media/
+
+# IDE
+.idea/
