@@ -71,5 +71,5 @@ jobs:
           
           docker run -d -p 8000:8000 --name weather-app \
             -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-            -e OPENWEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
+            -e WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
