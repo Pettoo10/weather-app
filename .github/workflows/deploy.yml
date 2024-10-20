@@ -73,3 +73,6 @@ jobs:
             -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
             -e WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
             ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
+          
+          docker exec weather-app python3 manage.py makemigrations
+          docker exec weather-app python3 manage.py migrate
