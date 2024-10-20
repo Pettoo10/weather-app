@@ -79,10 +79,17 @@ jobs:
 
     - name: Wait for the application to be available
       run: |
-        sleep 15
+        sleep 10
 
-    - name: Run tests
-      env:
-        BASE_URL: http://localhost:8000/api
+    - name: Install SSH client
+      run: sudo apt-get install -y openssh-client
+
+    - name: Add SSH key
       run: |
-        docker exec -it weather-app python manage.py test forecast.tests
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ssh_private_key.pem
+        chmod 600 ssh_private_key.pem
+
+    - name: Run tests on EC2
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ssh_private_key.pem ubuntu@${{ secrets.EC2_INSTANCE_IP }} \
+        "docker exec weather-app python manage.py test forecast.tests"
