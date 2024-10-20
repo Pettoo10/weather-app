@@ -195,5 +195,5 @@ def translate_text(text, target_language):
         return translation
     except Exception as e:
         # Print error message if translation fails
-        print(f"Transaction failed: {e}")
+        print(f"Translation failed: {e}")
         return text  # Return original text if translation fails
