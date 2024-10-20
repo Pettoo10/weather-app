@@ -13,7 +13,7 @@ from datetime import datetime
 
 
 load_dotenv()
-api_key = os.getenv('API_KEY')
+weather_api_key = os.getenv('WEATHER_API_KEY')
 
 @api_view(['GET'])
 def get_current_weather(request, location):
@@ -30,7 +30,7 @@ def get_current_weather(request, location):
     """
     try:
         # Fetch weather forecast from OpenWeatherMap API
-        url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={weather_api_key}&units=metric"
         response = requests.get(url)
         data = response.json()
 
@@ -119,7 +119,7 @@ def generate_weather_article(request):
         language = request.data.get('language', 'en')  # Výber medzi 'en' a 'sk'
 
         # Fetch weather forecast from OpenWeatherMap API
-        url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={api_key}&units=metric"
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={weather_api_key}&units=metric"
         response = requests.get(url)
         weather_data = response.json()
 
