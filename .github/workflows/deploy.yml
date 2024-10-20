@@ -76,3 +76,9 @@ jobs:
           
           docker exec weather-app python3 manage.py makemigrations
           docker exec weather-app python3 manage.py migrate
+
+    - name: Run tests
+      env:
+        BASE_URL: ${{ secrets.BASE_URL }}
+      run: |
+          python manage.py test forecast.tests

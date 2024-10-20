@@ -215,3 +215,9 @@ Once the server is running, you can access the API at:
 ```bash
 http://localhost:8000/api/
 ```
+
+### Step 9. Run Tests
+To run the tests, use the following command:
+```bash
+python manage.py test forecast.tests
+```
