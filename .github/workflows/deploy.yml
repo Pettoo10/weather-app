@@ -85,4 +85,4 @@ jobs:
       env:
         BASE_URL: http://localhost:8000/api
       run: |
-        docker exec weather-app python3 manage.py test forecast.tests
+        docker exec -it weather-app python manage.py test forecast.tests
