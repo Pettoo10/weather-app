@@ -3,7 +3,7 @@ name: Deploy to AWS EC2
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -48,7 +48,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.5
       with:
         host: ${{ secrets.EC2_INSTANCE_IP }}
-        username: ubuntu
+        username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           IMAGE_TAG=$(echo "${{ github.sha }}")
