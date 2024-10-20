@@ -115,8 +115,8 @@ def generate_weather_article(request):
     """
     try:
         location = request.data.get('location')
-        style = request.data.get('style', 'factual')  # Výber medzi 'factual' a 'tabloid'
-        language = request.data.get('language', 'en')  # Výber medzi 'en' a 'sk'
+        style = request.data.get('style', 'factual')  # Select 'factual' a 'tabloid'
+        language = request.data.get('language', 'en')  # Select 'en' a 'sk'
 
         # Fetch weather forecast from OpenWeatherMap API
         url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={weather_api_key}&units=metric"
@@ -195,5 +195,5 @@ def translate_text(text, target_language):
         return translation
     except Exception as e:
         # Print error message if translation fails
-        print(f"Translation failed: {e}")
+        print(f"Transaction failed: {e}")
         return text  # Return original text if translation fails
