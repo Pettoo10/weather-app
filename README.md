@@ -182,6 +182,7 @@ Create a .env file in the project root directory to store your environment varia
 ```env
 OPENAI_API_KEY=your_openai_api_key
 WEATHER_API_KEY=your_openweather_api_key
+BASE_URL=http://13.48.255.1:8000/api
 ```
 
 ### Step 5: Run Migrations
