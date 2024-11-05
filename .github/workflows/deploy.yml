@@ -59,11 +59,6 @@ jobs:
         docker tag weather-app:${IMAGE_TAG} ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
         docker push ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
 
-    - name: Install SSH Key
-      uses: webfactory/ssh-agent@v0.9.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
     - name: SSH to EC2 and run Docker container
       uses: appleboy/ssh-action@v0.1.5
       with:
@@ -74,25 +69,7 @@ jobs:
           IMAGE_TAG=$(echo "${{ github.sha }}")
           IMAGE_TAG=${IMAGE_TAG:0:7}
           echo "Using image tag: ${IMAGE_TAG}"
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
-
-          PREFIX="weather-app"
-          PREVIOUS_CONTAINER=$(docker ps -aq -f "name=${PREFIX}")
-    
-          if [ -n "${PREVIOUS_CONTAINER}" ]; then
-              echo "Stopping container: ${PREVIOUS_CONTAINER}"
-              docker stop ${PREVIOUS_CONTAINER}
-              echo "Removing container: ${PREVIOUS_CONTAINER}"
-              docker rm ${PREVIOUS_CONTAINER}
-          else
-              echo "No container found with prefix: ${PREFIX}"
-          fi
-          echo "Running container: ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}"
-          
-          docker run -d -p 8000:8000 --name weather-app \
-            -e OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} \
-            -e WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/weather-app:${IMAGE_TAG}
-          
-          docker exec weather-app python3 manage.py makemigrations
-          docker exec weather-app python3 manage.py migrate
+          cd /app/weather-app
+          docker-compose down
+          docker-compose pull
+          docker-compose up -d

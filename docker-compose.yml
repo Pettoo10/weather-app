@@ -10,7 +10,7 @@ services:
     volumes:
       - .:/app
     environment:
-      - DATABASE_URL=postgres://forecast_user:password@db:5432/forecast_db
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
 
   db:
     image: postgres:latest
