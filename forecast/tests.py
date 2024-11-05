@@ -1,34 +1,37 @@
 import os
+from datetime import datetime
 from unittest.mock import patch
+
 import requests
 from django.test import TestCase
 from rest_framework import status
 
 from forecast.models import WeatherForecast
 
-base_url= os.getenv('BASE_URL')
+base_url = os.getenv("BASE_URL")
+
 
 class WeatherApiTests(TestCase):
     def setUp(self):
         """Set up test data for the API tests."""
         WeatherForecast.objects.create(
-            location='Bratislava',
-            date='2024-10-18T12:00:00Z',
+            location="Bratislava",
+            date=datetime.strptime("2024-10-18T12:00:00Z", "%Y-%m-%dT%H:%M:%SZ"),
             temperature=15,
             humidity=90.0,
             wind_speed=10.0,
-            description='clear sky',
+            description="clear sky",
         )
         WeatherForecast.objects.create(
-            location='Bratislava',
-            date='2024-10-17T20:00:00Z',
+            location="Bratislava",
+            date=datetime.strptime("2024-10-17T20:00:00Z", "%Y-%m-%dT%H:%M:%SZ"),
             temperature=12,
             humidity=85.0,
             wind_speed=15.0,
-            description='overcast',
+            description="overcast",
         )
 
-    @patch('requests.get')
+    @patch("requests.get")
     def test_get_current_weather(self, mock_get):
         """
         Test the current weather endpoint.
@@ -47,25 +50,23 @@ class WeatherApiTests(TestCase):
         """
         mock_get.return_value.status_code = 200
         mock_get.return_value.json.return_value = {
-            'location': 'Bratislava',
-            'date': '2024-10-18',
-            'temperature': 15,
-            'humidity': 90.0,
-            'wind_speed': 10.0,
-            'description': 'clear sky',
-
+            "location": "Bratislava",
+            "date": "2024-10-18",
+            "temperature": 15,
+            "humidity": 90.0,
+            "wind_speed": 10.0,
+            "description": "clear sky",
         }
         response = requests.get(f"{base_url}/forecast/current/Bratislava")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('location', response.json())
-        self.assertIn('date', response.json())
-        self.assertIn('temperature', response.json())
-        self.assertIn('humidity', response.json())
-        self.assertIn('wind_speed', response.json())
-        self.assertIn('description', response.json())
+        self.assertIn("location", response.json())
+        self.assertIn("date", response.json())
+        self.assertIn("temperature", response.json())
+        self.assertIn("humidity", response.json())
+        self.assertIn("wind_speed", response.json())
+        self.assertIn("description", response.json())
 
-
-    @patch('requests.get')
+    @patch("requests.get")
     def test_get_historical_weather(self, mock_get):
         """
         Test the historical weather endpoint.
@@ -85,30 +86,42 @@ class WeatherApiTests(TestCase):
             - Each item in the response data should include 'forecast_source'.
         """
         mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = {
-            'id': 1,
-            'location': 'Bratislava',
-            'date': '2024-10-18',
-            'temperature': 15,
-            'humidity': 90.0,
-            'wind_speed': 10.0,
-            'description': 'clear sky',
-            'forecast_source': 'OpenWeatherMap'
-        }
+        mock_get.return_value.json.return_value = [
+            {
+                "id": 1,
+                "location": "Bratislava",
+                "date": "2024-10-18",
+                "temperature": 15,
+                "humidity": 90.0,
+                "wind_speed": 10.0,
+                "description": "clear sky",
+                "forecast_source": "OpenWeatherMap",
+            },
+            {
+                "id": 2,
+                "location": "Bratislava",
+                "date": "2024-10-17",
+                "temperature": 12,
+                "humidity": 85.0,
+                "wind_speed": 15.0,
+                "description": "overcast",
+                "forecast_source": "OpenWeatherMap",
+            },
+        ]
 
-        response = requests.get(f"{base_url}/forecast/current/Bratislava")
+        response = requests.get(f"{base_url}/forecast/historical/Bratislava")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('id', response.json())
-        self.assertIn('location', response.json())
-        self.assertIn('date', response.json())
-        self.assertIn('temperature', response.json())
-        self.assertIn('humidity', response.json())
-        self.assertIn('wind_speed', response.json())
-        self.assertIn('description', response.json())
-        self.assertIn('forecast_source', response.json())
+        for item in response.json():
+            self.assertIn("id", item)
+            self.assertIn("location", item)
+            self.assertIn("date", item)
+            self.assertIn("temperature", item)
+            self.assertIn("humidity", item)
+            self.assertIn("wind_speed", item)
+            self.assertIn("description", item)
+            self.assertIn("forecast_source", item)
 
-
-    @patch('requests.post')
+    @patch("requests.post")
     def test_generate_weather_article(self, mock_post):
         """
         Test the generate weather article endpoint.
@@ -131,16 +144,12 @@ class WeatherApiTests(TestCase):
         mock_post.return_value.json.return_value = {
             "title": "Weather in Bratislava on 2024-10-18",
             "preamble": "Current weather in Bratislava is clear sky with a temperature of 15°C.",
-            "body": "Today in Bratislava, the weather is warm and sunny..."
+            "body": "Today in Bratislava, the weather is warm and sunny...",
         }
 
-        payload = {
-            "location": "Bratislava",
-            "style": "factual",
-            "language": "en"
-        }
-        response = requests.post(f"{base_url}/forecast/article", payload)
+        payload = {"location": "Bratislava", "style": "factual", "language": "en"}
+        response = requests.post(f"{base_url}/forecast/article", json=payload)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertIn('title', response.json())
-        self.assertIn('preamble', response.json())
-        self.assertIn('body', response.json())
+        self.assertIn("title", response.json())
+        self.assertIn("preamble", response.json())
+        self.assertIn("body", response.json())

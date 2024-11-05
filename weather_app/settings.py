@@ -90,6 +90,16 @@ DATABASES = {
     }
 }
 
+if os.getenv("TESTING"):
+    DATABASES["default"] = {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "test_forecast_db",
+        "USER": "forecast_user",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": "5432",
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

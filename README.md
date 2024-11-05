@@ -172,7 +172,7 @@ source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 ### Step 3: Install Dependencies
 If you're not using Docker, install the required Python dependencies:
-    
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -220,5 +220,5 @@ http://localhost:8000/api/
 ### Step 9. Run Tests
 To run the tests, use the following command:
 ```bash
-python manage.py test forecast.tests
+TESTING=true python manage.py test
 ```
