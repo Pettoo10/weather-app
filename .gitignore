@@ -5,12 +5,10 @@ __pycache__/
 # Environemt files
 .env
 
-# Database files
-db.sqlite3
-
 # Django
 /static/
 /media/
 
 # IDE
 .idea/
+.venv/
