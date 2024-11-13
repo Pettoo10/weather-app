@@ -170,14 +170,8 @@ python3 -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 ```
 
-### Step 3: Install Dependencies
-If you're not using Docker, install the required Python dependencies:
 
-```bash
-pip install -r requirements.txt
-```
-
-### Step 4: Create a .env File
+### Step 3: Create a .env File
 Create a .env file in the project root directory to store your environment variables. Here’s a sample structure:
 ```env
 OPENAI_API_KEY=your_openai_api_key
@@ -185,39 +179,27 @@ WEATHER_API_KEY=your_openweather_api_key
 BASE_URL=http://13.48.255.1:8000/api
 ```
 
-### Step 5: Run Migrations
-If you are running the application for the first time, you'll need to run the database migrations:
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### Step 6: Run the Development Server
-If you are running the application locally (not in Docker), start the development server:
-```bash
-python manage.py runserver
-```
-
-### Step 7: Using Docker (Alternative)
+### Step 4: Using Docker
 If you prefer to run the application using Docker:
 ```bash
-# Build the Docker image
-docker build -t weather-app .
+# Build the Docker image and start the containers
+docker-compose up --build
 
-# Run the Docker container
-docker run -d -p 8000:8000 --name weather-app \
-    -e OPENAI_API_KEY=your_openai_api_key_here \
-    -e WEATHER_API_KEY=your_weather_api_key_here \
-    weather-app:latest
+# Run the Docker containers
+docker-compose up -d
+
+# Stop the Docker containers
+docker-compose down
 ```
 
-### Step 8: Access the API
+
+### Step 5: Access the API
 Once the server is running, you can access the API at:
 ```bash
 http://localhost:8000/api/
 ```
 
-### Step 9. Run Tests
+### Step 6. Run Tests
 To run the tests, use the following command:
 ```bash
 TESTING=true python manage.py test
